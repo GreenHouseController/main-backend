@@ -1,6 +1,7 @@
 # Might need to use:
 # https://pypi.org/project/RPi.GPIO/
 import gpiozero
+from signal import pause
 import config
 
 from flask import Flask, request, make_response
@@ -95,10 +96,14 @@ class Sensor():
     def __init__(self, kind, gpio_pin):
         self.kind = kind
         self.gpio_pin = gpio_pin
+        def pushed () :
+            if self.kind == "ALARM":
+                print ("sending email") 
+            else:
+                print ("You pressed the button")
+                print (self.kind)
         self.button_instance = gpiozero.Button(self.gpio_pin)
-        self.button_instance.wait_for_press()
-        print("button pressed")
-
+        self.button_instance.when_pressed = pushed
 
 if __name__ == '__main__':
 
@@ -111,6 +116,10 @@ if __name__ == '__main__':
         test_instance.activate()
 
         sensor_instance = Sensor("temperature", 21)
+        print ("test")
+        alarm_instance = Sensor("ALARM", 21)
+
+        pause()
 
     # Start the webserver
     socket_server.run(webserver, host="localhost", port=config.flask["port"], debug=config.flask["debug"])
