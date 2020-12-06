@@ -1,7 +1,6 @@
 # Might need to use:
 # https://pypi.org/project/RPi.GPIO/
 import gpiozero
-
 import config
 
 class Actuator():
@@ -45,7 +44,15 @@ class Sensor():
         self.button_instance.wait_for_press()
         print("button pressed")
 
-test_instance = Actuator("heater", 17)
-test_instance.activate()
+if __name__ == '__main__':
 
-sensor_instance = Sensor("temperature", 21)
+    # Only create our actuator and sensor instances if mock_pi is set to False
+    # mock_pi being set to False indicates that we should be connected to
+    # the raspberry pi controller
+    if config.mock_pi == False:
+
+        test_instance = Actuator("heater", 17)
+        test_instance.activate()
+
+        sensor_instance = Sensor("temperature", 21)
+    
