@@ -24,7 +24,7 @@ class Actuator():
         self.deactivate()
 
     def identifier_string(self):
-        return f"{self.kind} @ pin{self.gpio_pin}: "
+        return f"{self.kind} @ pin{self.gpio_pin}: 
 
     def activate(self):
         self.active = True
@@ -41,9 +41,11 @@ class Sensor():
     def __init__(self, kind, gpio_pin):
         self.kind = kind
         self.gpio_pin = gpio_pin
+        def pushed () :
+            print ("You pressed the button")
         self.button_instance = gpiozero.Button(self.gpio_pin)
-        self.button_instance.wait_for_press()
-        print("button pressed")
+        self.button_instance.when_pressed = pressed
+        pause ()
 
 test_instance = Actuator("heater", 17)
 test_instance.activate()
