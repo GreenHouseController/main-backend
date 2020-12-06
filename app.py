@@ -5,6 +5,7 @@ import config
 
 from flask import Flask, request, make_response
 from flask_cors import CORS
+from flask_socketio import SocketIO
 
 # Flask web server definition
 webserver = Flask(__name__)
@@ -41,6 +42,21 @@ class PinStatus():
             "status": self.status
         }
 
+# Socket server definition
+socket_server = SocketIO(webserver)
+
+@socket_server.on('connect')
+def client_connected():
+    print('Client connected')
+    emit('connected', {'data': 'Connected'})
+
+@socket_server.on('disconnect')
+def test_disconnect():
+    print('Client disconnected')
+
+# Used for sending messages to the frontend
+def send_message(payload):
+    emit('message', payload, broadcast=True)
 
 class Actuator():
 
@@ -97,5 +113,5 @@ if __name__ == '__main__':
         sensor_instance = Sensor("temperature", 21)
 
     # Start the webserver
-    webserver.run(host="localhost", port=config.flask["port"], debug=config.flask["debug"])
+    socket_server.run(webserver, host="localhost", port=config.flask["port"], debug=config.flask["debug"])
     
