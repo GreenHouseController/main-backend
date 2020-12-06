@@ -1,7 +1,7 @@
 # Might need to use:
 # https://pypi.org/project/RPi.GPIO/
 import gpiozero
-
+from signal import pause
 import config
 
 class Actuator():
@@ -24,7 +24,7 @@ class Actuator():
         self.deactivate()
 
     def identifier_string(self):
-        return f"{self.kind} @ pin{self.gpio_pin}: 
+        return f"{self.kind} @ pin{self.gpio_pin}: "
 
     def activate(self):
         self.active = True
@@ -42,12 +42,19 @@ class Sensor():
         self.kind = kind
         self.gpio_pin = gpio_pin
         def pushed () :
-            print ("You pressed the button")
+            if self.kind == "ALARM":
+                print ("sending email") 
+            else:
+                print ("You pressed the button")
+                print (self.kind)
         self.button_instance = gpiozero.Button(self.gpio_pin)
-        self.button_instance.when_pressed = pressed
-        pause ()
+        self.button_instance.when_pressed = pushed
 
 test_instance = Actuator("heater", 17)
 test_instance.activate()
 
-sensor_instance = Sensor("temperature", 21)
+sensor_instance = Sensor("temperature", 26)
+print ("test")
+alarm_instance = Sensor("ALARM", 21)
+
+pause()
