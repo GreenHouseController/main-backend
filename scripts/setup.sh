@@ -8,11 +8,16 @@ NC='\033[0;0m' # No Color
 
 # Helpers
 function set_source {
-	WINDOWS_SCRIPT_DIR="venv/scripts/activate"
+	WINDOWS_SCRIPT1_DIR="venv/Scripts/activate"
+	WINDOWS_SCRIPT2_DIR="venv/scripts/activate"
 	UNIX_SCRIPT_DIR="venv/bin/activate"
 
-	if [ -d "$WINDOWS_SCRIPT_DIR" ]; then
-		ACTIVATE_SCRIPT_DIR="$WINDOWS_SCRIPT_DIR"
+	if [[ -f "$WINDOWS_SCRIPT1_DIR" ]] 
+	then
+		ACTIVATE_SCRIPT_DIR="$WINDOWS_SCRIPT1_DIR"
+	elif [[ -f "$WINDOWS_SCRIPT2_DIR" ]] 
+	then
+		ACTIVATE_SCRIPT_DIR="$WINDOWS_SCRIPT2_DIR"
 	else 
 		ACTIVATE_SCRIPT_DIR="$UNIX_SCRIPT_DIR"
 	fi
