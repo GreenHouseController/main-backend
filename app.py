@@ -1,12 +1,14 @@
 # Might need to use:
 # https://pypi.org/project/RPi.GPIO/
 import gpiozero
-from signal import pause
+    from signal import pause
 import config
 
 from flask import Flask, request, make_response
 from flask_cors import CORS
 from flask_socketio import SocketIO
+
+status_list = []
 
 # Flask web server definition
 webserver = Flask(__name__)
@@ -17,10 +19,7 @@ def get_all_pin_status():
 
     status_code = 200
     message = "Pin status query successful!"
-    data = [
-        PinStatus(10, "Heater Status", True).to_json(),
-        PinStatus(11, "Pump Status", False).to_json()
-    ]
+    data = status_list
 
     dummy_response_data = {
         "status_code": status_code,
@@ -115,9 +114,18 @@ if __name__ == '__main__':
         test_instance = Actuator("heater", 17)
         test_instance.activate()
 
+
         sensor_instance = Sensor("temperature", 21)
-        print ("test")
+        if sensor_instance.button_instance.value == 1:
+            status_list.append("Heater is on")
+        else:
+            status_list.append("Heater is off")
+
         alarm_instance = Sensor("ALARM", 21)
+        if alarm_instance.button_instance.value == 1:
+            status_list.append("Alarm is on")
+        else:
+            status_list.append("Alarm is off")
 
         pause()
 
