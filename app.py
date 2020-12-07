@@ -1,9 +1,7 @@
 # Might need to use:
 # https://pypi.org/project/RPi.GPIO/
 import gpiozero
-    from signal import pause
 import config
-
 from flask import Flask, request, make_response
 from flask_cors import CORS
 from flask_socketio import SocketIO
@@ -120,14 +118,11 @@ if __name__ == '__main__':
             status_list.append("Heater is on")
         else:
             status_list.append("Heater is off")
-
-        alarm_instance = Sensor("ALARM", 21)
+        alarm_instance = Sensor("ALARM", 26)
         if alarm_instance.button_instance.value == 1:
             status_list.append("Alarm is on")
         else:
             status_list.append("Alarm is off")
-
-        pause()
 
     # Start the webserver
     socket_server.run(webserver, host="localhost", port=config.flask["port"], debug=config.flask["debug"])
