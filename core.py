@@ -22,8 +22,16 @@ def heater_on_callback(channel):
     global heater_status
     heater_status = not heater_status
     print(heater_status)
-def heater_off_callback(channel):
-    print("Heater off")
+def heater_callback_timer(channel):
+    print("Starting timer")
+    count = 0
+    while GPIO.input = (25):
+        if count == 5:
+            break     
+        else: 
+            sleep(1)
+            count = count + 1
+            print(count)
     global heater_status
     heater_status = not heater_status
 # Might need to change trigger condition to GPIO.FALLING or GPIO.BOTH
@@ -37,6 +45,7 @@ def blink(pin_id):
     GPIO.output(pin_id, True)
 #    print("Humidifier turning on")
     print("Humidifier status:", GPIO.input(25))
+    sleep(2)
 #    GPIO.output(pin_id, False)
 #    print("Humdifier status:", GPIO.input(25))
 
