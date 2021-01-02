@@ -46,7 +46,7 @@ def heater_callback_timer(channel):
 	while GPIO.input(2) == 1:
 		global heater_status_2
 		heater_status_2 = False
-		if count == 3:
+		if count == 2:
 		     global heater_status
 		     heater_status = False
                      break
@@ -72,14 +72,14 @@ while True:
       if heater_status == True:
              blink(humidifier_switch)
       else:
-      	     print("this is running")
 	     sleep(1)
+      	     print("Humidifier is off")
 	     GPIO.output(25, 0)
       if heater_status_2 == True:
             blink(blower_switch)
       else:
-	    print("this is runnning 2")
             sleep(1)
+	    print("Blower is off")
             GPIO.output(24, 0)
 
 
