@@ -4,26 +4,27 @@ from time import sleep
 
 GPIO.setmode(GPIO.BCM)
 
-heater_on = 3
+heater_on = 2
 humidifier_switch = 25
 
-# Might need bounce, currently at 100ms
+# Might need bounce on event, currently at 100ms
 # Might need to switch pull_up_down to GPIO.PUD_UP
-GPIO.setup(heater_on, GPIO.IN, pull_up_down=GPIO.PUD_DOWN, bouncetime=100)
+GPIO.setup(heater_on, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(humidifier_switch, GPIO.OUT)
 
 heater_status = False
 
 # this will run in another thread when the button is pushed 
 def heater_on_callback(channel):  
+    print("Heater on")
     heater_status = not heater_status
 
 # Might need to change trigger condition to GPIO.FALLING or GPIO.BOTH
 GPIO.add_event_detect(heater_on, GPIO.RISING, callback=heater_on_callback)
 
-while True:
-    if heater_status == True:
-        blink(humidifier_switch)
+#while True:
+#    if heater_status == True:
+#        blink(humidifier_switch)
 
 def blink(pin_id):
     GPIO.output(pin_id, True)
@@ -31,7 +32,7 @@ def blink(pin_id):
     sleep(5)
     GPIO.output(pin_id, False)
 
-
+blink(humidifier_switch)
 
 # class Actuator():
 
