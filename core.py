@@ -17,7 +17,7 @@ global heater_status
 heater_status = False
 
 # this will run in another thread when the button is pushed 
-def heater_on_callback(channel):  
+def heater_on_callback(channel):
     print("Heater on")
     global heater_status
     heater_status = not heater_status
@@ -25,17 +25,29 @@ def heater_on_callback(channel):
 def heater_callback_timer(channel):
     print("Starting timer")
     count = 0
-    while GPIO.input = (25):
-        if count == 5:
-            break     
-        else: 
-            sleep(1)
-            count = count + 1
-            print(count)
-    global heater_status
-    heater_status = not heater_status
+    sleep(1)
+    if GPIO.input(2) == 0:
+    	while GPIO.input(2) == 0:
+        	if count == 5:
+	    	     global heater_status
+            	     heater_status = True
+            	     break
+        	else:
+            	     sleep(1)
+            	     count = count + 1
+            	     print(count)
+    else:
+	while GPIO.input(2) == 1:
+		if count == 2:
+		     global heater_status
+		     heater_status = False
+                     break
+		else:
+		     sleep(1)
+                     count = count + 1
+                     print(count)
 # Might need to change trigger condition to GPIO.FALLING or GPIO.BOTH
-GPIO.add_event_detect(heater_on, GPIO.BOTH, callback=heater_on_callback, bouncetime=1000)
+GPIO.add_event_detect(heater_on, GPIO.BOTH, callback=heater_callback_timer, bouncetime=1000)
 #GPIO.add_event_detect(heater_on, GPIO.FALLING, callback=heater_off_callback, bouncetime=1000)
 #while True:
 #    if heater_status:
