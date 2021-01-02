@@ -11,28 +11,44 @@ humidifier_switch = 25
 # Might need to switch pull_up_down to GPIO.PUD_UP
 GPIO.setup(heater_on, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(humidifier_switch, GPIO.OUT)
-
+GPIO.output(25, 0)
+print("Humidifier status:", GPIO.input(25))
+global heater_status
 heater_status = False
 
 # this will run in another thread when the button is pushed 
 def heater_on_callback(channel):  
     print("Heater on")
+    global heater_status
     heater_status = not heater_status
-
+    print(heater_status)
+def heater_off_callback(channel):
+    print("Heater off")
+    global heater_status
+    heater_status = not heater_status
 # Might need to change trigger condition to GPIO.FALLING or GPIO.BOTH
-GPIO.add_event_detect(heater_on, GPIO.RISING, callback=heater_on_callback)
-
+GPIO.add_event_detect(heater_on, GPIO.BOTH, callback=heater_on_callback, bouncetime=1000)
+#GPIO.add_event_detect(heater_on, GPIO.FALLING, callback=heater_off_callback, bouncetime=1000)
 #while True:
-#    if heater_status == True:
+#    if heater_status:
 #        blink(humidifier_switch)
 
 def blink(pin_id):
     GPIO.output(pin_id, True)
-    print("Humidifier turning on")
-    sleep(5)
-    GPIO.output(pin_id, False)
+#    print("Humidifier turning on")
+    print("Humidifier status:", GPIO.input(25))
+#    GPIO.output(pin_id, False)
+#    print("Humdifier status:", GPIO.input(25))
 
-blink(humidifier_switch)
+while True:
+      if heater_status == True:
+             blink(humidifier_switch)
+      else:
+      	     print("this is running")
+	     sleep(1)
+	     GPIO.output(25, 0)
+
+#blink(humidifier_switch)
 
 # class Actuator():
 
