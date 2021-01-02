@@ -34,8 +34,8 @@ def heater_callback_timer(channel):
         global heater_status
         heater_status = True
     	while GPIO.input(2) == 0:
-        	if count == 5:
-	    	         global heater_status_2
+        	if count == 2:
+	    	     global heater_status_2
             	     heater_status_2 = True
             	     break
         	else:
@@ -46,14 +46,14 @@ def heater_callback_timer(channel):
 	while GPIO.input(2) == 1:
 		global heater_status_2
 		heater_status_2 = False
-		if count == 2:
+		if count == 3:
 		     global heater_status
 		     heater_status = False
-             break
+                     break
 		else:
 		     sleep(1)
-             count = count + 1
-             print(count)
+                     count = count + 1
+                     print(count)
 # Might need to change trigger condition to GPIO.FALLING or GPIO.BOTH
 GPIO.add_event_detect(heater_on, GPIO.BOTH, callback=heater_callback_timer, bouncetime=1000)
 #GPIO.add_event_detect(heater_on, GPIO.FALLING, callback=heater_off_callback, bouncetime=1000)
@@ -77,9 +77,10 @@ while True:
 	     GPIO.output(25, 0)
       if heater_status_2 == True:
             blink(blower_switch)
-      else: print("this is runnning 2")
-         sleep(1)
-         GPIO.output(24, 0)
+      else:
+	    print("this is runnning 2")
+            sleep(1)
+            GPIO.output(24, 0)
 
 
 #blink(humidifier_switch)
