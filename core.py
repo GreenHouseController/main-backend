@@ -3,13 +3,15 @@ import RPi.GPIO as GPIO
 from time import sleep
 
 GPIO.setmode(GPIO.BCM)
-
+simultaneous = 3
 heater_on = 2
+
 humidifier_switch = 25
 blower_switch = 24
 # Might need bounce on event, currently at 100ms
 # Might need to switch pull_up_down to GPIO.PUD_UP
 GPIO.setup(heater_on, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(simultaneous, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(humidifier_switch, GPIO.OUT)
 GPIO.setup(blower_switch, GPIO.OUT)
 GPIO.output(25, 0)
@@ -26,6 +28,9 @@ heater_status_2 = False
 #    global heater_status
 #    heater_status = not heater_status
 #    print(heater_status)
+def simultaneous_callback(channel):
+    print ("this is running")
+
 def heater_callback_timer(channel):
     print("Starting timer")
     count = 0
@@ -33,29 +38,30 @@ def heater_callback_timer(channel):
     if GPIO.input(2) == 0:
         global heater_status
         heater_status = True
-    	while GPIO.input(2) == 0:
-        	if count == 2:
-	    	     global heater_status_2
-            	     heater_status_2 = True
-            	     break
-        	else:
-            	     sleep(1)
-            	     count = count + 1
-            	     print(count)
-    else:
-	while GPIO.input(2) == 1:
-		global heater_status_2
-		heater_status_2 = False
-		if count == 2:
-		     global heater_status
-		     heater_status = False
+        while GPIO.input(2) == 0:
+            if count == 2:
+                global heater_status_2
+                     heater_status_2 = True
                      break
-		else:
-		     sleep(1)
+            else:
+                     sleep(1)
+                     count = count + 1
+                     print(count)
+    else:
+    while GPIO.input(2) == 1:
+        global heater_status_2
+        heater_status_2 = False
+        if count == 2:
+             global heater_status
+             heater_status = False
+                     break
+        else:
+             sleep(1)
                      count = count + 1
                      print(count)
 # Might need to change trigger condition to GPIO.FALLING or GPIO.BOTH
 GPIO.add_event_detect(heater_on, GPIO.BOTH, callback=heater_callback_timer, bouncetime=1000)
+GPIO.add_event_detect(simultaneous, GPIO.BOTH, callback=simultaneous_callback)
 #GPIO.add_event_detect(heater_on, GPIO.FALLING, callback=heater_off_callback, bouncetime=1000)
 #while True:
 #    if heater_status:
