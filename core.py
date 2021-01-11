@@ -41,27 +41,28 @@ def heater_callback_timer(channel):
         while GPIO.input(2) == 0:
             if count == 2:
                 global heater_status_2
-                     heater_status_2 = True
-                     break
+                heater_status_2 = True
+                break
             else:
-                     sleep(1)
-                     count = count + 1
-                     print(count)
+                sleep(1)
+                count = count + 1
+                print(count)
     else:
-    while GPIO.input(2) == 1:
-        global heater_status_2
-        heater_status_2 = False
-        if count == 2:
-             global heater_status
-             heater_status = False
-                     break
-        else:
-             sleep(1)
-                     count = count + 1
-                     print(count)
+        while GPIO.input(2) == 1:
+            global heater_status_2
+            heater_status_2 = False
+            if count == 2:
+                 global heater_status
+                 heater_status = False
+                 break
+            else:
+                 sleep(1)
+                 count = count + 1
+                 print(count)
+             
 # Might need to change trigger condition to GPIO.FALLING or GPIO.BOTH
 GPIO.add_event_detect(heater_on, GPIO.BOTH, callback=heater_callback_timer, bouncetime=1000)
-GPIO.add_event_detect(simultaneous, GPIO.BOTH, callback=simultaneous_callback)
+GPIO.add_event_detect(simultaneous, GPIO.RISING, callback=simultaneous_callback, bouncetime=1000)
 #GPIO.add_event_detect(heater_on, GPIO.FALLING, callback=heater_off_callback, bouncetime=1000)
 #while True:
 #    if heater_status:
@@ -75,18 +76,19 @@ def blink(pin_id):
 #    print("Humdifier status:", GPIO.input(25))
 
 while True:
-      if heater_status == True:
-             blink(humidifier_switch)
-      else:
-	     sleep(1)
-      	     print("Humidifier is off")
-	     GPIO.output(25, 0)
-      if heater_status_2 == True:
-            blink(blower_switch)
-      else:
-            sleep(1)
-	    print("Blower is off")
-            GPIO.output(24, 0)
+    if heater_status == True:
+        blink(humidifier_switch)
+    else:
+        print("Humidifier is off")
+        GPIO.output(25, 0)
+     
+    if heater_status_2 == True:
+        blink(blower_switch)
+    else:
+        print("Blower is off")
+        GPIO.output(24, 0)
+        
+    sleep(1)
 
 
 #blink(humidifier_switch)
