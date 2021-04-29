@@ -63,7 +63,8 @@ if __name__ == '__main__':
 
         test_instance = core.Actuator("heater", 17)
         test_instance.activate()
-
+        socket_server.run(webserver, host="localhost", port=config.flask["port"], d$
+        console.log("hi")
 
         sensor_instance = core.Sensor("temperature", 21)
         if sensor_instance.button_instance.value == 1:
@@ -75,7 +76,6 @@ if __name__ == '__main__':
             status_list.append("Alarm is on")
         else:
             status_list.append("Alarm is off")
-
     # Start the webserver
     # socket_server.run(webserver, host="localhost", port=config.flask["port"], debug=config.flask["debug"])
     
