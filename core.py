@@ -78,8 +78,8 @@ while True:
       if heater_status_2 == True:
             blink(blower_switch)
       else: print("this is runnning 2")
-         sleep(1)
-         GPIO.output(24, 0)
+            sleep(1)
+            GPIO.output(24, 0)
 
 
 #blink(humidifier_switch)

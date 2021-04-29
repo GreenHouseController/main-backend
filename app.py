@@ -1,11 +1,10 @@
 import config
 import core
-from flask import Flask, request, make_response
-from flask_cors import CORS
-from flask_socketio import SocketIO
+from flask import Flask, request, make_response, Response
+# from flask_cors import CORS
+# from flask_socketio import SocketIO
 
 status_list = []
-
 # Flask web server definition
 webserver = Flask(__name__)
 CORS(webserver)
@@ -39,20 +38,20 @@ class PinStatus():
         }
 
 # Socket server definition
-socket_server = SocketIO(webserver)
+# socket_server = SocketIO(webserver)
 
-@socket_server.on('connect')
-def client_connected():
-    print('Client connected')
-    emit('connected', {'data': 'Connected'})
+# @socket_server.on('connect')
+# def client_connected():
+#     print('Client connected')
+#     emit('connected', {'data': 'Connected'})
 
-@socket_server.on('disconnect')
-def test_disconnect():
-    print('Client disconnected')
+# @socket_server.on('disconnect')
+# def test_disconnect():
+#     print('Client disconnected')
 
-# Used for sending messages to the frontend
-def send_message(payload):
-    emit('message', payload, broadcast=True)
+# # Used for sending messages to the frontend
+# def send_message(payload):
+#     emit('message', payload, broadcast=True)
 
 
 if __name__ == '__main__':
@@ -78,5 +77,5 @@ if __name__ == '__main__':
             status_list.append("Alarm is off")
 
     # Start the webserver
-    socket_server.run(webserver, host="localhost", port=config.flask["port"], debug=config.flask["debug"])
+    # socket_server.run(webserver, host="localhost", port=config.flask["port"], debug=config.flask["debug"])
     
