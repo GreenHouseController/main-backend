@@ -78,5 +78,5 @@ if __name__ == '__main__':
         else:
             status_list.append("Alarm is off")
     # Start the webserver
-    socket_server.run(webserver, host="localhost", port=config.flask["port"], debug=config.flask["debug"])
-    console.log("hi")
+   # socket_server.run(webserver, host="localhost", port=config.flask["port"], debug=config.flask["debug"])
+   # console.log("hi")
