@@ -75,20 +75,24 @@ def blink(pin_id):
 #    GPIO.output(pin_id, False)
 #    print("Humdifier status:", GPIO.input(25))
 
-while True:
-    if heater_status == True:
-        blink(humidifier_switch)
-    else:
-        print("Humidifier is off")
-        GPIO.output(25, 0)
+def start():
+    while True:
+        if heater_status == True:
+            blink(humidifier_switch)
+        else:
+            print("Humidifier is off")
+            GPIO.output(25, 0)
      
-    if heater_status_2 == True:
-        blink(blower_switch)
-    else:
-        print("Blower is off")
-        GPIO.output(24, 0)
+        if heater_status_2 == True:
+            blink(blower_switch)
+        else:
+            print("Blower is off")
+            GPIO.output(24, 0)
         
-    sleep(1)
+        sleep(1)
+        
+def getHeaterStatus():
+    return heater_status
 
 
 #blink(humidifier_switch)

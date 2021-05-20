@@ -1,15 +1,20 @@
 import config
 import core
+import threading
 from flask import Flask, request, make_response, Response
 # from flask_cors import CORS
 # from flask_socketio import SocketIO
 
 status_list = []
 # Flask web server definition
-webserver = Flask(__name__)
-CORS(webserver)
+app = Flask(__name__)
+#CORS(webserver)
 
-@webserver.route('/pin/status', methods=['GET'])
+@app.route("/")
+def hello():
+    return str(core.getHeaterStatus())
+
+@app.route('/pin/status', methods=['GET'])
 def get_all_pin_status():
 
     status_code = 200
@@ -55,7 +60,10 @@ class PinStatus():
 
 
 if __name__ == '__main__':
-
+    kwargs = {'host': '0.0.0.0', 'port': 5000, 'threaded' : True, 'use_reloader':False, 'debug': True}
+    threading.Thread(target=app.run, kwargs=kwargs).start()
+    threading.Thread(target=core.start).start()
+    print ("duiwad")
     # Only create our actuator and sensor instances if mock_pi is set to False
     # mock_pi being set to False indicates that we should be connected to
     # the raspberry pi controller.
@@ -63,7 +71,6 @@ if __name__ == '__main__':
 
         test_instance = core.Actuator("heater", 17)
         test_instance.activate()
-        socket_server.run(webserver, host="localhost", port=config.flask["port"], d$
         console.log("hi")
 
         sensor_instance = core.Sensor("temperature", 21)
@@ -75,7 +82,7 @@ if __name__ == '__main__':
         if alarm_instance.button_instance.value == 1:
             status_list.append("Alarm is on")
         else:
-            status_list.append("Alarm is off")
+             status_list.append("Alarm is off")
     # Start the webserver
     # socket_server.run(webserver, host="localhost", port=config.flask["port"], debug=config.flask["debug"])
     
