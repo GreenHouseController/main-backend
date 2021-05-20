@@ -1,18 +1,26 @@
 import config
 import core
 import threading
-from flask import Flask, request, make_response, Response
+from flask import Flask, request, make_response, Response, jsonify
 # from flask_cors import CORS
 # from flask_socketio import SocketIO
 
-status_list = []
+status_list = [
+    {'Heater': 0,
+     'Blower' : 0,},
+]
+
+
 # Flask web server definition
 app = Flask(__name__)
 #CORS(webserver)
 
 @app.route("/")
 def hello():
-    return str(core.getHeaterStatus())
+    status_list[0]['Heater'] = core.getHeaterStatus()
+    status_list[0]['Blower']= core.getBlowerStatus()
+    return jsonify(status_list)
+#jsonify(core.getHeaterStatus())
 
 @app.route('/pin/status', methods=['GET'])
 def get_all_pin_status():

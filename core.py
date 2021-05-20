@@ -94,6 +94,8 @@ def start():
 def getHeaterStatus():
     return heater_status
 
+def getBlowerStatus():
+    return heater_status_2
 
 #blink(humidifier_switch)
 
