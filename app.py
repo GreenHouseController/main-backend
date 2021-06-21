@@ -2,7 +2,8 @@ import config
 import core
 import threading
 from flask import Flask, request, make_response, Response, jsonify
-# from flask_cors import CORS
+from flask_cors import CORS
+#from flask.ext.cors import CORS, cross_origin
 # from flask_socketio import SocketIO
 
 status_list = [
@@ -13,7 +14,8 @@ status_list = [
 
 # Flask web server definition
 app = Flask(__name__)
-#CORS(webserver)
+CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route("/")
 def hello():
@@ -22,20 +24,11 @@ def hello():
     return jsonify(status_list)
 #jsonify(core.getHeaterStatus())
 
-@app.route('/pin/status', methods=['GET'])
-def get_all_pin_status():
-
-    status_code = 200
-    message = "Pin status query successful!"
-    data = status_list
-
-    dummy_response_data = {
-        "status_code": status_code,
-        "message": message,
-        "data": data,
-    }
-    return make_response((dummy_response_data, status_code, None))
-
+@app.route('/Inputs', methods=['GET', 'POST'])
+def get_all_inputs():
+    data = request.form
+    return data
+    
 class PinStatus():
 
     def __init__(self, pin_number, device_name, status):
