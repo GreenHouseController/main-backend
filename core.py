@@ -97,6 +97,12 @@ def getHeaterStatus():
 def getBlowerStatus():
     return heater_status_2
 
+
+def blinkPinNumber(pin,status):
+    
+
+
+
 #blink(humidifier_switch)
 
 # class Actuator():

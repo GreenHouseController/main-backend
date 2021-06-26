@@ -26,7 +26,8 @@ def hello():
 
 @app.route('/Inputs', methods=['GET', 'POST'])
 def get_all_inputs():
-    data = request.form
+    data = request.data
+    print (data)
     return data
     
 class PinStatus():
