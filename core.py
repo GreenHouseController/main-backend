@@ -22,6 +22,8 @@ global heater_status
 heater_status = False
 global heater_status_2
 heater_status_2 = False
+global simultaneous_status
+simultaneous_status = False
 # this will run in another thread when the button is pushed 
 #def heater_on_callback(channel):
 #    print("Heater on")
@@ -30,66 +32,50 @@ heater_status_2 = False
 #    print(heater_status)
 def simultaneous_callback(channel):
     print ("this is running")
+    count = 0
+    sleep(1)
+    if GPIO.input(3) == 0:
+        global simultaneous_status
+        simultaneous_status = True
+    else:
+        global simultaneous_status
+        simultaneous_status = False
 
 def heater_callback_timer(channel):
     print("Starting timer")
     count = 0
     sleep(1)
     if GPIO.input(2) == 0:
-        global heater_status
-        heater_status = True
-        while GPIO.input(2) == 0:
-            if count == 2:
-                global heater_status_2
-                heater_status_2 = True
-                break
-            else:
-                sleep(1)
-                count = count + 1
-                print(count)
+        global heater_status_2
+        heater_status_2 = True
     else:
-        while GPIO.input(2) == 1:
-            global heater_status_2
-            heater_status_2 = False
-            if count == 2:
-                 global heater_status
-                 heater_status = False
-                 break
-            else:
-                 sleep(1)
-                 count = count + 1
-                 print(count)
+        global heater_status_2
+        heater_status_2 = False
              
 # Might need to change trigger condition to GPIO.FALLING or GPIO.BOTH
 GPIO.add_event_detect(heater_on, GPIO.BOTH, callback=heater_callback_timer, bouncetime=1000)
-GPIO.add_event_detect(simultaneous, GPIO.RISING, callback=simultaneous_callback, bouncetime=1000)
+GPIO.add_event_detect(simultaneous, GPIO.BOTH, callback=simultaneous_callback, bouncetime=1000)
 #GPIO.add_event_detect(heater_on, GPIO.FALLING, callback=heater_off_callback, bouncetime=1000)
 #while True:
 #    if heater_status:
 #        blink(humidifier_switch)
 
-def blink(pin_id):
-    GPIO.output(pin_id, True)
-#    print("Humidifier turning on"
-    sleep(2)
-#    GPIO.output(pin_id, False)
-#    print("Humdifier status:", GPIO.input(25))
 
-def start():
-    while True:
-        if heater_status == True:
-            blink(humidifier_switch)
-        else:
-            print("Humidifier is off")
-            GPIO.output(25, 0)
-     
-        if heater_status_2 == True:
-            blink(blower_switch)
-        else:
-            print("Blower is off")
-            GPIO.output(24, 0)
-        
-        sleep(1)
+#def start():
+#    while True:
+#        if heater_status == True:
+#            blink(humidifier_switch)
+#        else:
+#            print("Humidifier is off")
+#            GPIO.output(25, 0)
+#     
+#        if heater_status_2 == True:
+#            blink(blower_switch)
+ #       else:
+ #           print("Blower is off")
+ #           GPIO.output(24, 0)
+ #       
+ #       sleep(1)
         
 def getHeaterStatus():
     return heater_status
@@ -97,12 +83,18 @@ def getHeaterStatus():
 def getBlowerStatus():
     return heater_status_2
 
+def getSimultaneousStatus():
+    return simultaneous_status
 
 def blinkPinNumber(pin,status):
-    
+    if status==True:
+        GPIO.output(pin, GPIO.HIGH)
+    else:
+        GPIO.output(pin, GPIO.LOW)
 
 
-
+#blinkPinNumber(pin,status)
+#sleep(10)
 #blink(humidifier_switch)
 
 # class Actuator():

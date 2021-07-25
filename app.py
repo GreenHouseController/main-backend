@@ -1,5 +1,6 @@
 import config
 import core
+from core import *
 import threading
 from flask import Flask, request, make_response, Response, jsonify
 from flask_cors import CORS
@@ -21,6 +22,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 def hello():
     status_list[0]['Heater'] = core.getHeaterStatus()
     status_list[0]['Blower']= core.getBlowerStatus()
+    status_list[0]['Simultaneous']=core.getSimultaneousStatus()
     return jsonify(status_list)
 #jsonify(core.getHeaterStatus())
 
@@ -28,7 +30,21 @@ def hello():
 def get_all_inputs():
     data = request.data
     print (data)
-    return data
+    #return data
+    data1 = data.split(":")[1]
+    data2 = data.split(":")[3]
+    print (data1)
+    print (data2)
+    if data1 == "false":
+        blinkPinNumber(24,False)
+    elif data1 == "true":
+        blinkPinNumber(24,True)
+    if data2 == "false":
+        blinkPinNumber(25,False)
+    elif data2 == "true":
+        blinkPinNumber(25,True)
+    return(data)
+    
     
 class PinStatus():
 
@@ -59,7 +75,8 @@ class PinStatus():
 # # Used for sending messages to the frontend
 # def send_message(payload):
 #     emit('message', payload, broadcast=True)
-
+pin = 24
+status = True
 
 if __name__ == '__main__':
     kwargs = {'host': '0.0.0.0', 'port': 5000, 'threaded' : True, 'use_reloader':False, 'debug': True}
