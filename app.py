@@ -9,7 +9,11 @@ from flask_cors import CORS
 
 status_list = [
     {'Heater': 0,
-     'Blower' : 0,},
+     'Main_Power' : 0,
+     'Blower' : 0,
+     'Dehumidifier' : 0,
+     'Sump_Pump' : 0,
+     'Hi_Level' : 0},
 ]
 
 
@@ -21,8 +25,11 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 @app.route("/")
 def hello():
     status_list[0]['Heater'] = core.getHeaterStatus()
-    status_list[0]['Blower']= core.getBlowerStatus()
-    status_list[0]['Simultaneous']=core.getSimultaneousStatus()
+    status_list[0]['Main_Power']=core.getMainPowerStatus()
+    status_list[0]['Blower']=core.getBlowerStatus()
+    status_list[0]['Dehumidifier']=core.getDehumidifierStatus()
+    status_list[0]['Sump_Pump']=core.getSumpPumpStatus()
+    status_list[0]['Hi_Level']=core.getHiLevelStatus()
     return jsonify(status_list)
 #jsonify(core.getHeaterStatus())
 
@@ -33,15 +40,21 @@ def get_all_inputs():
     #return data
     data1 = data.split(":")[1]
     data2 = data.split(":")[3]
+    data3 = data.split(":")[5]
     print (data1)
     print (data2)
+    print (data3)
     if data1 == "false":
         blinkPinNumber(24,False)
     elif data1 == "true":
         blinkPinNumber(24,True)
     if data2 == "false":
-        blinkPinNumber(25,False)
+        blinkPinNumber(23,False)
     elif data2 == "true":
+        blinkPinNumber(23,True)
+    if data3 == "false":
+        blinkPinNumber(25,False)
+    elif data3 == "true":
         blinkPinNumber(25,True)
     return(data)
     
