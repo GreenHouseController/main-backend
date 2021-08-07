@@ -9,6 +9,7 @@ blower_on = 4
 dehumidifier_on = 17
 sump_pump_on = 27
 hi_level_alarm_on = 22
+test_charge = 5
 
 humidifier_switch = 25
 blower_switch = 24
@@ -17,10 +18,11 @@ heater_switch = 23
 # Might need to switch pull_up_down to GPIO.PUD_UP
 GPIO.setup(heater_on, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(main_power_on, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(blower_on, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(dehumidifier_on, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(sump_pump_on, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(hi_level_alarm_on, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(blower_on, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(dehumidifier_on, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(sump_pump_on, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(hi_level_alarm_on, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(test_charge, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(humidifier_switch, GPIO.OUT)
 GPIO.setup(blower_switch, GPIO.OUT)
 GPIO.setup(heater_switch, GPIO.OUT)
@@ -109,7 +111,10 @@ def hi_level_alarm_callback(channel):
         hi_level_alarm_status = True
     else:
         global hi_level_alarm_status
-        hi_level_alarm_status = False 
+        hi_level_alarm_status = False
+        
+def test_callback(channel):
+    print ("RECIEVED INPUT")
 # Might need to change trigger condition to GPIO.FALLING or GPIO.BOTH
 GPIO.add_event_detect(main_power_on, GPIO.BOTH, callback=main_power_callback, bouncetime=1000)
 GPIO.add_event_detect(heater_on, GPIO.BOTH, callback=heater_callback, bouncetime=1000)
@@ -117,6 +122,7 @@ GPIO.add_event_detect(blower_on, GPIO.BOTH, callback=blower_callback, bouncetime
 GPIO.add_event_detect(dehumidifier_on, GPIO.BOTH, callback=dehumidifier_callback, bouncetime=1000)
 GPIO.add_event_detect(sump_pump_on, GPIO.BOTH, callback=sump_pump_callback, bouncetime=1000)
 GPIO.add_event_detect(hi_level_alarm_on, GPIO.BOTH, callback=hi_level_alarm_callback, bouncetime=1000)
+GPIO.add_event_detect(test_charge, GPIO.BOTH, callback=test_callback, bouncetime=1000)
 #GPIO.add_event_detect(heater_on, GPIO.FALLING, callback=heater_off_callback, bouncetime=1000)
 
         
@@ -130,7 +136,7 @@ def getBlowerStatus():
     return blower_status
 
 def getDehumidifierStatus():
-    return blower_status
+    return dehumidifier_status
 
 def getSumpPumpStatus():
     return sump_pump_status
